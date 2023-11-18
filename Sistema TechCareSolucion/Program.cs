@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace Sistema_TechCareSolucion
 {
     public class Program
@@ -8,6 +10,14 @@ namespace Sistema_TechCareSolucion
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.LoginPath = "/Home/Servicios";
+                    o.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                    o.AccessDeniedPath = "/Home/Index";
+                });
 
             var app = builder.Build();
 
@@ -23,6 +33,8 @@ namespace Sistema_TechCareSolucion
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

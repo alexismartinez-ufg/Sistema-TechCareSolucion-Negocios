@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sistema_TechCareSolucion.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Sistema_TechCareSolucion.Controllers
 {
@@ -22,6 +26,45 @@ namespace Sistema_TechCareSolucion.Controllers
         {
             return View();
         }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (model.UserName == "alexis" && model.Password == "1234")
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, model.UserName),
+                    new Claim(ClaimTypes.Role, "administrador")
+                };
+
+                var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
+
+                return RedirectToAction("Servicios");
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "administrador")]
+        public IActionResult Servicios()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
