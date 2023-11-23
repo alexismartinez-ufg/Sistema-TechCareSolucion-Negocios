@@ -1,3 +1,4 @@
+using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Sistema_TechCareSolucion
@@ -10,6 +11,10 @@ namespace Sistema_TechCareSolucion
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<EmprendimientosContext>();
+
+            //builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o =>

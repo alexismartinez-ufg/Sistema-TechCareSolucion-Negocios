@@ -4,7 +4,27 @@
 
 @section CartButton
 {
-    @Html.Partial("CardButtom")
+    @await Html.PartialAsync("CardButtom")
+}
+
+@section CatalogStore
+{
+    @await Html.PartialAsync("CatalogStore")
+}
+
+@if (User != null && User.Identity != null && !User.Identity.IsAuthenticated)
+{
+    @section LoginButton
+    {
+        @await Html.PartialAsync("LoginButtom")
+    }
+}
+@if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+{
+    @section LogoutButton
+    {
+        @await Html.PartialAsync("LogoutButtom")
+    }
 }
 
 <!-- Header-->
