@@ -48,15 +48,9 @@ namespace Sistema_TechCareSolucion.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
 
-                return RedirectToAction("Servicios");
+                return RedirectToAction("Index", "Servicio");
             }
 
-            return View();
-        }
-
-        [Authorize(Roles = "administrador")]
-        public IActionResult Servicios()
-        {
             return View();
         }
 

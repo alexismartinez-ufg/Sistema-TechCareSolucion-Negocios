@@ -1,0 +1,15 @@
+﻿@if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+{
+    @section LogoutButton
+    {
+    @await Html.PartialAsync("LogoutButtom")
+    }
+}
+
+<h1 class="text-center text-light">Servicios TechCare Solutions</h1>
+
+<div class="row">
+    <div>
+        <a asp-controller="Servicio" asp-action="NuevoServicio" class="btn btn-light">Nuevo Servicio</a>
+    </div>
+</div>

@@ -19,7 +19,7 @@ namespace Sistema_TechCareSolucion
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o =>
                 {
-                    o.LoginPath = "/Home/Servicios";
+                    o.LoginPath = "/Home/Login";
                     o.ExpireTimeSpan = TimeSpan.FromMinutes(5);
                     o.AccessDeniedPath = "/Home/Index";
                 });
