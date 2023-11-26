@@ -76,7 +76,8 @@ namespace Sistema_TechCareSolucion.Controllers
                             Equipo = model.Dispositivo,
                             Tecnico = (await usuarioRepository.GetByIdAsync(tecnico)).Nombre,
                             UrlPublic = servicio.IdServicioPublic,
-                            Usuario = usuario.Nombre
+                            Usuario = usuario.Nombre,
+                            Server = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}"
                         }
                     };
 
@@ -176,6 +177,7 @@ namespace Sistema_TechCareSolucion.Controllers
                     var model = new WorkFlowServicioViewModel();
                     var servicio = await servicioRepository.GetByPublicWithIncludeAsync(publicId.ToString());
                     model.Servicio = servicio;
+                    model.Reparacion = JsonConvert.DeserializeObject<ReparacionViewModel>(servicio.DetalleServicio.ContentService);
                     return View(typeView, model);
                 }
             }

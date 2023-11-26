@@ -124,18 +124,18 @@ WriteLiteral(" su servicio de reparación ha sido iniciado por el técnico ");
 
 #line default
 #line hidden
-WriteLiteral(".</h3>\r\n            <label");
+WriteLiteral(".</h3>\r\n            <h4");
 
 WriteLiteral(" class=\"center\"");
 
-WriteLiteral(">Puede acceder por medio de este enlace <a");
+WriteLiteral(">Puede dar seguimiento a su servicio accediendo por medio de este enlace <a");
 
 WriteLiteral(" id=\"LinkToRedirect\"");
 
 WriteAttribute ("href", " href=\"", "\""
 
 #line 40 "InitReparacion.cshtml"
-                                                               , Tuple.Create<string,object,bool> ("", Model.Server
+                                                                                             , Tuple.Create<string,object,bool> ("", Model.Server
 
 #line default
 #line hidden
@@ -143,7 +143,7 @@ WriteAttribute ("href", " href=\"", "\""
 , Tuple.Create<string,object,bool> ("", "/Servicio/Public/", true)
 
 #line 40 "InitReparacion.cshtml"
-                                                                                             , Tuple.Create<string,object,bool> ("", Model.UrlPublic
+                                                                                                                           , Tuple.Create<string,object,bool> ("", Model.UrlPublic
 
 #line default
 #line hidden
@@ -153,12 +153,12 @@ WriteLiteral(">");
 
 
 #line 40 "InitReparacion.cshtml"
-                                                                                                                                                 Write(Model.UrlPublic);
+                                                                                                                                                                               Write(Model.UrlPublic);
 
 
 #line default
 #line hidden
-WriteLiteral("</a></label>\r\n        </div>\r\n    </div>\r\n</body>\r\n\r\n</html>");
+WriteLiteral("</a></h4>\r\n        </div>\r\n    </div>\r\n</body>\r\n\r\n</html>");
 
 }
 }
