@@ -27,6 +27,10 @@ textarea {
         cursor: not-allowed;
     }
 
+    button:hover, a:hover{
+        cursor:pointer;
+    }
+
 .card-hover {
     transition: transform 0.3s;
 }

@@ -3,6 +3,7 @@ using DAL;
 using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,55 @@ namespace BAL.Repositorios
             dbContext = _dbContext;
         }
 
+        public async Task<bool> AgregarRepuestoPorServicio(int idServicio, Repuestos repuesto)
+        {
+            try
+            {
+                var detalle = await dbContext.DetalleServicios.FirstOrDefaultAsync(x => x.IdServicio == idServicio);
+
+                var reparacion = JsonConvert.DeserializeObject<ReparacionViewModel>(detalle.ContentService);
+
+                if (reparacion.HistorialRepuestos == null)
+                    reparacion.HistorialRepuestos = new List<Repuestos>();
+
+                reparacion.HistorialRepuestos.Add(repuesto);
+
+                detalle.ContentService = JsonConvert.SerializeObject(reparacion);
+
+                dbContext.Entry(detalle).State = EntityState.Modified;
+
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<Servicio> GetByIdWithIncludeAsync(int id)
         {
             return await dbContext.Servicios.Include(x => x.Cliente).Include(x => x.Tecnico).Include(x => x.DetalleServicio).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Servicio> GetByPublicWithIncludeAsync(string publicId)
+        {
+            return await dbContext.Servicios.Include(x => x.Cliente).Include(x => x.Tecnico).Include(x => x.DetalleServicio).FirstOrDefaultAsync(x => x.IdServicioPublic == publicId);
+        }
+
+        public async Task<DataTableResponse<Repuestos>> ListRepuestosPorId(DataTableJS model, int idServicio)
+        {
+            var detalle = await dbContext.DetalleServicios.FirstOrDefaultAsync(x => x.IdServicio == idServicio);
+
+            var reparacion = JsonConvert.DeserializeObject<ReparacionViewModel>(detalle.ContentService);
+
+            if (reparacion.HistorialRepuestos == null)
+                reparacion.HistorialRepuestos = new List<Repuestos>();
+
+            var result = reparacion.HistorialRepuestos.ToList();
+
+            return new DataTableResponse<Repuestos> { CountFiltered = result.Count, CountTotal = reparacion.HistorialRepuestos.Count, Result = result };
         }
 
         public async Task<DataTableResponse<ServiciosViewModel>> ListServicios(DataTableJS model)

@@ -1,1 +1,48 @@
-﻿
+﻿@model DAL.ViewModels.WorkFlowServicioViewModel
+
+<div class="row mt-4">
+
+    <input type="hidden" asp-for="Servicio.Id" />
+
+    <div class="col-md-6 text-light card-transparent-rounded">
+        <h4 class="text-light text-center mt-3">Repuestos utilizados</h4>
+        <table id="ReparacionesTable" class="table table-dark table-striped table-bordered dafault-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Costo</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="4" class="text-center">Cargando historial...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-5 card-transparent-rounded-dark ms-2">
+        <div id="chat-container" class="container h-100">
+            <h4 class="mt-3 text-center text-light">Comentarios del tecnico</h4>
+
+            <div id="chat-messages" class="border mt-1 mb-2 p-2 overflow-auto">
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script src="~/js/WorkFlow.js"></script>
+}
+
+                    <style>
+    #ReparacionesTable th:nth-child(3),
+    #ReparacionesTable td:nth-child(3) {
+        display: none;
+    }
+
+                    </style>

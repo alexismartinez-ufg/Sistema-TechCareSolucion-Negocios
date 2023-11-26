@@ -11,6 +11,10 @@ namespace BAL.Interfaces
     public interface IServicioRepository : IRepository<Servicio>
     {
         Task<Servicio> GetByIdWithIncludeAsync(int id);
+        Task<Servicio> GetByPublicWithIncludeAsync(string id);
         Task<DataTableResponse<ServiciosViewModel>> ListServicios(DataTableJS model);
+        Task<DataTableResponse<Repuestos>> ListRepuestosPorId(DataTableJS model, int idservicio);
+
+        Task<bool> AgregarRepuestoPorServicio(int idServicio, Repuestos repuesto);
     }
 }

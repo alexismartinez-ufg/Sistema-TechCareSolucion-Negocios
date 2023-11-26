@@ -68,7 +68,8 @@ namespace Sistema_TechCareSolucion.Controllers
 
                     if (model.IniciarReparacionYa)
                     {
-                        //TODO redirect to ReparacionModule
+                        var typeView = "WorkFlow";
+                        return Redirect($"/Servicio/{typeView}/{servicio.Id}");
                     }
                     else
                     {
@@ -101,6 +102,23 @@ namespace Sistema_TechCareSolucion.Controllers
             }); ;
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> GetRepuestosByServicio(DataTableJS request, int idServicio)
+        {
+            var data = await servicioRepository.ListRepuestosPorId(request, idServicio);
+
+            return Json(new
+            {
+                draw = request.Draw,
+                recordsTotal = data.CountTotal,
+                recordsFiltered = data.CountFiltered,
+                request_ = request,
+                data = data.Result
+            }); ;
+        }
+
+        [AllowAnonymous]
         [Route("/Servicio/{typeView}/{publicId}", Name = "doservicio")]
         public async Task<IActionResult> Servicio(string typeView, string publicId)
         {
@@ -111,23 +129,33 @@ namespace Sistema_TechCareSolucion.Controllers
 
                 if (typeView == "WorkFlow" && int.TryParse(publicId, out id))
                 {
-                    var model = new WorkFlowServicioViewModel();
-                    var servicio = await servicioRepository.GetByIdWithIncludeAsync(id);
-
-                    if (servicio != null )
+                    if (User.IsInRole("administrador"))
                     {
-                        servicio.FechaInicio = servicio.EstadoServicio == "En Espera" ? DateTime.Now : servicio.FechaInicio;
-                        servicio.EstadoServicio = servicio.EstadoServicio == "En Espera" ? "En Progreso" : servicio.EstadoServicio;
+                        var model = new WorkFlowServicioViewModel();
+                        var servicio = await servicioRepository.GetByIdWithIncludeAsync(id);
 
-                        model.Servicio = servicio;
-                        model.Reparacion = JsonConvert.DeserializeObject<ReparacionViewModel>(servicio.DetalleServicio.ContentService);
+                        if (servicio != null)
+                        {
+                            servicio.FechaInicio = servicio.EstadoServicio == "En Espera" ? DateTime.Now : servicio.FechaInicio;
+                            servicio.EstadoServicio = servicio.EstadoServicio == "En Espera" ? "En Progreso" : servicio.EstadoServicio;
+
+                            model.Servicio = servicio;
+                            model.Reparacion = JsonConvert.DeserializeObject<ReparacionViewModel>(servicio.DetalleServicio.ContentService);
+                        }
+
+                        return View(typeView, model);
                     }
-
-                    return View(typeView, model);
+                    else
+                    {
+                        return RedirectToAction("Login", "Home");
+                    }
                 }
-                else if (typeView == "Public" && Guid.TryParse(publicId, out publicGuid))
+                else if (typeView == "Public" && !string.IsNullOrEmpty(publicId))
                 {
-                    return View(typeView);
+                    var model = new WorkFlowServicioViewModel();
+                    var servicio = await servicioRepository.GetByPublicWithIncludeAsync(publicId.ToString());
+                    model.Servicio = servicio;
+                    return View(typeView, model);
                 }
             }
             catch (Exception ex)
@@ -138,6 +166,7 @@ namespace Sistema_TechCareSolucion.Controllers
             return RedirectToAction("Index");
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> GetComentarios(int idServicio)
         {
             var comentarios = await comentarioRepository.GetComentariosByServicioId(idServicio);
@@ -155,6 +184,21 @@ namespace Sistema_TechCareSolucion.Controllers
                     FechaComentario = model.Fecha,
                     IdServicio = model.Idservicio
                 });
+            }
+            catch (Exception ex)
+            {
+                var message = ex;
+            }
+            
+            return Ok("Comentario agregado con éxito");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AgregarRepuesto(Repuestos moded, int idServicio)
+        {
+            try
+            {
+                await servicioRepository.AgregarRepuestoPorServicio(idServicio, moded);
             }
             catch (Exception ex)
             {
