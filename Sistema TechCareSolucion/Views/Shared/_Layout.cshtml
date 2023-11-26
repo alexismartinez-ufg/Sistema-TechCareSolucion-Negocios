@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - Sistema_TechCareSolucion</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Sistema_TechCareSolucion.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -20,6 +19,8 @@
                         @RenderSection("CatalogStore", required: false)
 
                         @RenderSection("LoginButton", required: false)
+
+                        @RenderSection("Administracion", required: false)
                     </ul>
 
                     @RenderSection("CartButton", required: false)
@@ -37,6 +38,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script src="~/lib/DataTables/DataTables-1.11.3/js/dataTables.bootstrap4.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

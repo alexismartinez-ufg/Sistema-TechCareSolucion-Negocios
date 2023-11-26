@@ -1,4 +1,4 @@
-﻿namespace Sistema_TechCareSolucion.Models
+﻿namespace DAL.ViewModels
 {
     public class LoginViewModel
     {

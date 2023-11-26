@@ -2,6 +2,14 @@
 {
     public class ReparacionViewModel : TipoServicio
     {
+        public ReparacionViewModel(NuevaReparacionViewModel reparacion)
+        {
+            Problema = reparacion.Problema;
+            TipoDispositivo = reparacion.Dispositivo;
+            Marca = reparacion.Marca;
+            Modelo = reparacion.Modelo;
+        }
+
         public string Diagnostico {  get; set; }
                
         public string Problema { get; set; }

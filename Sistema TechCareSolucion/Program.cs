@@ -1,3 +1,5 @@
+using BAL.Interfaces;
+using BAL.Repositorios;
 using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -13,6 +15,8 @@ namespace Sistema_TechCareSolucion
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<EmprendimientosContext>();
+            builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            builder.Services.AddTransient<IServicioRepository, ServicioRepository>();
 
             //builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 

@@ -29,9 +29,16 @@ namespace BAL.Repositorios
             return await _dbContext.SaveChangesAsync();
         }
 
-        public virtual async Task<T> GetByIdAsync(int id) => await _dbContext.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
+        public virtual async Task<T> GetByIdAsync(int id)
+        {
+            return await _dbContext.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
+        }
 
-        public async Task<List<T>> ListAsync() => await _dbContext.Set<T>().ToListAsync();
+        public async Task<List<T>> ListAsync()
+        {
+            return await _dbContext.Set<T>().ToListAsync();
+        }
+
 
         public async Task<int> UpdateAsync<T>(T entity) where T : BaseModel
         {

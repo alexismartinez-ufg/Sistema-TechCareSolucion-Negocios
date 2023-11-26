@@ -26,6 +26,13 @@
         @await Html.PartialAsync("LogoutButtom")
     }
 }
+@if (User != null && User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("administrador"))
+{
+    @section Administracion
+    {
+        @await Html.PartialAsync("Administracion")
+    }
+}
 
 <!-- Header-->
 <header class="bg-dark py-5">

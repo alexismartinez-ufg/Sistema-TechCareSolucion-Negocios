@@ -31,13 +31,12 @@ namespace DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comentario")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaComentario")
+                    b.Property<DateTime?>("FechaComentario")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdServicio")
+                    b.Property<int?>("IdServicio")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -55,13 +54,17 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdServicio")
+                    b.Property<string>("ContentService")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("IdServicio")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdServicio")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IdServicio] IS NOT NULL");
 
                     b.ToTable("DetalleServicios");
                 });
@@ -74,34 +77,31 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("CostoServicio")
+                    b.Property<double?>("CostoServicio")
                         .HasColumnType("float");
 
                     b.Property<string>("EstadoServicio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaFin")
+                    b.Property<DateTime?>("FechaFin")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaInicio")
+                    b.Property<DateTime?>("FechaInicio")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdCliente")
+                    b.Property<int?>("IdCliente")
                         .HasColumnType("int");
 
                     b.Property<string>("IdServicioPublic")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdTecnico")
+                    b.Property<int?>("IdTecnico")
                         .HasColumnType("int");
 
                     b.Property<string>("TipoServicio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("TotalServicio")
+                    b.Property<double?>("TotalServicio")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -122,27 +122,24 @@ namespace DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Direccion")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -154,9 +151,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Models.Servicio", "Servicio")
                         .WithMany("Comentarios")
-                        .HasForeignKey("IdServicio")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdServicio");
 
                     b.Navigation("Servicio");
                 });
@@ -165,9 +160,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Models.Servicio", "Servicio")
                         .WithOne("DetalleServicio")
-                        .HasForeignKey("DAL.Models.DetalleServicio", "IdServicio")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DAL.Models.DetalleServicio", "IdServicio");
 
                     b.Navigation("Servicio");
                 });
@@ -177,14 +170,12 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Models.Usuario", "Cliente")
                         .WithMany()
                         .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DAL.Models.Usuario", "Tecnico")
                         .WithMany()
                         .HasForeignKey("IdTecnico")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Cliente");
 

@@ -1,0 +1,98 @@
+﻿@using DAL.ViewModels;
+@model NuevaReparacionViewModel
+
+<form asp-action="CrearReparacion" asp-controller="Servicio" id="CrearReparacionForm">
+    <div class="row mt-5 text-light card-transparent-rounded p-4" style="background-color:#ffffff3d !important">
+        <input type="hidden" asp-for="IniciarReparacionYa" />
+
+        <!-- Información del Cliente -->
+        <div class="col-md-6" style="border-right: 1px dashed gainsboro;">
+            <h1 class="text-center">Información del cliente</h1>
+
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" asp-for="Nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" class="form-control" asp-for="Apellido" required>
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" class="form-control" asp-for="Correo" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" class="form-control" asp-for="Telefono" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion">Dirección</label>
+                <input type="text" class="form-control" asp-for="Direccion" required>
+            </div>
+        </div>
+
+        <!-- Información de la Reparación -->
+        <div class="col-md-6" style="border-left: 1px dashed gainsboro;">
+            <h1 class="text-center">Información de la reparación</h1>
+
+            <div class="form-group">
+                <label for="dispositivo">Dispositivo</label>
+                <input type="text" class="form-control" asp-for="Dispositivo" required>
+            </div>
+            <div class="form-group">
+                <label for="marca">Marca</label>
+                <input type="text" class="form-control" asp-for="Marca" required>
+            </div>
+            <div class="form-group">
+                <label for="modelo">Modelo</label>
+                <input type="text" class="form-control" asp-for="Modelo" required>
+            </div>
+            <div class="form-group">
+                <label for="problema">Problema que presenta</label>
+                <textarea class="form-control" asp-for="Problema" rows="3" required></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón "Crear Reparación" -->
+    <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <button type="button" class="btn btn-light" onclick="mostrarModal()">Crear Reparación</button>
+            <a asp-action="Index" asp-controller="Servicio" class="btn btn-dark">Cancelar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        function mostrarModal() {
+            Swal.fire({
+                title: '¿Desea iniciar la reparación?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Iniciar reparación',
+                cancelButtonText: 'Agendar reparación'
+            }).then((result) => {
+
+                $("#IniciarReparacionYa").val(result.isConfirmed);
+
+                if (CrearReparacionForm.checkValidity()) {
+                    $("#CrearReparacionForm").submit()
+                }
+                else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor, llena todos los campos',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            })
+        }
+    </script>
+}

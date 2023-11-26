@@ -1,8 +1,8 @@
-﻿<h1>¿Qué tipo de servicio será?</h1>
+﻿<h1 class="text-light">¿Qué tipo de servicio será?</h1>
 
 <div class="text-center mt-5 gap-5 d-flex justify-content-center">
-    <button class="btn btn-dark btn-lg">Reparación</button>
-    <button class="btn btn-light btn-lg">Limpieza</button>
+    <a asp-action="NuevaReparacion" asp-controller="Servicio" class="btn btn-dark btn-lg">Reparación</a>
+    <a asp-action="NuevaLimpieza" asp-controller="Servicio" class="btn btn-light btn-lg" >Limpieza</a>
 </div>
 
 @section ContainerStyles{ h-75 d-flex justify-content-center align-items-center}

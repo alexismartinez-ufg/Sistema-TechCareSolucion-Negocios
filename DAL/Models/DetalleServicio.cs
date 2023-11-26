@@ -11,7 +11,9 @@ namespace DAL.Models
     public class DetalleServicio : BaseModel
     {
         [ForeignKey("Servicio")]
-        public int IdServicio { get; set; }
+        public int? IdServicio { get; set; }
+
+        public string? ContentService { get; set; }
         
         public virtual Servicio Servicio { get; set; }
     }

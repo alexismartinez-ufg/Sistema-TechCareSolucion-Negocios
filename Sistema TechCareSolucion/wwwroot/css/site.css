@@ -31,6 +31,11 @@ body {
     border-radius: 10px;
 }
 
+.card-transparent-rounded-dark {
+    background-color: #00000070;
+    border-radius: 10px;
+}
+
 body::-webkit-scrollbar {
     width: 0px;
 }

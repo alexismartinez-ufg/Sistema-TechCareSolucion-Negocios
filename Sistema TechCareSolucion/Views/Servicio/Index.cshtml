@@ -6,10 +6,37 @@
     }
 }
 
-<h1 class="text-center text-light">Servicios TechCare Solutions</h1>
+<h1 class="text-center text-light">Servicios</h1>
 
-<div class="row">
-    <div>
-        <a asp-controller="Servicio" asp-action="NuevoServicio" class="btn btn-light">Nuevo Servicio</a>
+<div class="main-header mt-4 text-end">
+    <a asp-controller="Servicio" asp-action="NuevoServicio" class="btn btn-light">Nuevo Servicio</a>
+</div>
+
+<div class="row card-transparent-rounded-dark pt-2 mt-3">
+    <div class="col-md-12 text-light">
+        <table id="Serviciotable" class="table table-dark table-striped table-bordered dafault-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Tipo</th>
+                    <th>Tecnico</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="9" class="text-center">Cargando servicios...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
+@section Scripts{
+    <script type="text/javascript" src="~/js/Servicio.js"></script>
+}

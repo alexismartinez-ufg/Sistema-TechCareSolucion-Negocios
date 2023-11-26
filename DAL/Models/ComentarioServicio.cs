@@ -7,12 +7,12 @@ namespace DAL.Models
     {
 
         [ForeignKey("Servicio")]
-        public int IdServicio { get; set; }
+        public int? IdServicio { get; set; }
 
         public virtual Servicio Servicio { get; set; }
 
-        public string Comentario { get; set; }
+        public string? Comentario { get; set; }
 
-        public DateTime FechaComentario { get; set; }
+        public DateTime? FechaComentario { get; set; }
     }
 }
