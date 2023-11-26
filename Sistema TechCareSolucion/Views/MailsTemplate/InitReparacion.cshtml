@@ -1,0 +1,45 @@
+﻿@model DAL.ViewModels.InitReparacionViewModel
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>TechCare Solutions Services</title>
+    <style>
+        body {
+            background: linear-gradient(90deg, rgba(135, 81, 228, 1) 0%, rgba(104, 116, 248, 1) 35%, rgba(25, 185, 242, 1) 100%);
+            color: white;
+        }
+
+        .jumbotron {
+            background-color: transparent;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .img-container {
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4 center" style="color: rgb(50, 186, 240);">TechCare Solutions Services</h1>
+            <div class="img-container center">
+                <img src="cid:imagen.png" alt="Imagen adjunta" class="img-fluid">
+            </div>
+            <h3 class="center">Estimado @Model.Usuario su servicio de reparación ha sido iniciado por el técnico @Model.Tecnico.</h3>
+            <label class="center">Puede acceder por medio de este enlace <a id="LinkToRedirect" href="@Model.Server/Servicio/Public/@Model.UrlPublic">@Model.UrlPublic</a></label>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -13,11 +13,14 @@ namespace Sistema_TechCareSolucion.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUsuarioRepository usuarioRepository;
+        private readonly IConfiguration configuration;
 
-        public HomeController(ILogger<HomeController> logger, IUsuarioRepository _usuarioRepository)
+
+        public HomeController(ILogger<HomeController> logger, IUsuarioRepository _usuarioRepository, IConfiguration _configuration)
         {
             _logger = logger;
             usuarioRepository = _usuarioRepository;
+            configuration = _configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -30,6 +33,22 @@ namespace Sistema_TechCareSolucion.Controllers
                     UserName = "Alexis",
                     Password = "qwerty",
                     Email = "alexislelele@gmail.com",
+                    Role = "administrador"
+                });
+                await usuarioRepository.CreateUserIfNotExist(new DAL.Models.Usuario
+                {
+                    Nombre = "Oscar Minero",
+                    UserName = "Oscar",
+                    Password = "Administrador123!",
+                    Email = "oscarminero@yopmail.com",
+                    Role = "administrador"
+                });
+                await usuarioRepository.CreateUserIfNotExist(new DAL.Models.Usuario
+                {
+                    Nombre = "Admin 01",
+                    UserName = "admin",
+                    Password = "Administrador123!",
+                    Email = "techCareSolutions.yopmail.com",
                     Role = "administrador"
                 });
             }

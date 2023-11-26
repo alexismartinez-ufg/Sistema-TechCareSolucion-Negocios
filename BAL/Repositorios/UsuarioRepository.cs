@@ -41,11 +41,11 @@ namespace BAL.Repositorios
         public async Task<Usuario> CreateUserIfNotExist(Usuario user)
         {
             Func<Usuario, bool> userExist = x =>
-                (x.Email.ToLower() == user.Email.ToLower()
-                && x.Nombre.ToLower().Contains(user.Nombre.ToLower())
-                && x.Role.ToLower() == user.Role.ToLower()
-                && x.Password.ToLower() == user.Password.ToLower())
-                || x.UserName.ToLower() == user.UserName.ToLower();
+                (x.Email == user.Email
+                && x.Nombre.Contains(user.Nombre)
+                && x.Role == user.Role
+                && x.Password == user.Password)
+                || x.UserName == user.UserName;
 
             return await CreateIfNotExist(userExist, user);
         }

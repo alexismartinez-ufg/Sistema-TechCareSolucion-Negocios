@@ -2,6 +2,7 @@ using BAL.Interfaces;
 using BAL.Repositorios;
 using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sistema_TechCareSolucion
 {
@@ -14,10 +15,14 @@ namespace Sistema_TechCareSolucion
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<EmprendimientosContext>();
+            string connectionString = builder.Configuration.GetConnectionString("EmprendimientosConnection");
+
+            builder.Services.AddDbContext<EmprendimientosContext>(options => options.UseSqlServer(connectionString));
+
             builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddTransient<IServicioRepository, ServicioRepository>();
             builder.Services.AddTransient<IComentarioRepository, ComentarioRepository>();
+            builder.Services.AddTransient<IMailNotification, MailNotification>();
 
             //builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 

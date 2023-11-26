@@ -4,6 +4,7 @@ using DAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Sistema_TechCareSolucion.Views.MailsTemplate;
 using System.Data;
 using System.Security.Claims;
 
@@ -15,12 +16,14 @@ namespace Sistema_TechCareSolucion.Controllers
         private readonly IUsuarioRepository usuarioRepository;
         private readonly IServicioRepository servicioRepository;
         private readonly IComentarioRepository comentarioRepository;
+        private readonly IMailNotification mailNotification;
 
-        public ServicioController(IUsuarioRepository _usuarioRepository, IServicioRepository _servicioRepository, IComentarioRepository _comentarioRepository)
+        public ServicioController(IUsuarioRepository _usuarioRepository, IServicioRepository _servicioRepository, IComentarioRepository _comentarioRepository, IMailNotification _mailNotification)
         {
             usuarioRepository = _usuarioRepository;
             servicioRepository = _servicioRepository;
             comentarioRepository = _comentarioRepository;
+            mailNotification = _mailNotification;
         }
 
         public IActionResult Index()
@@ -48,22 +51,40 @@ namespace Sistema_TechCareSolucion.Controllers
                 {
                     var usuario = await usuarioRepository.CreateClienteIfNotExist(model);
 
-                    var reparacionJson = JsonConvert.SerializeObject(new ReparacionViewModel(model));
+                    var tecnico = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                     var servicio = await servicioRepository.AddAsync(new Servicio()
                     {
                         IdCliente = usuario.Id,
-                        IdTecnico = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                        IdTecnico = tecnico,
                         EstadoServicio = model.IniciarReparacionYa ? "En progreso" : "En Espera",
                         FechaInicio = model.IniciarReparacionYa ? new DateTime() : null,
                         IdServicioPublic = Guid.NewGuid().ToString(),
                         TipoServicio = "reparación",
                     });
 
-                    var detalleServicio = await servicioRepository.AddAsync(new DetalleServicio()
+                    await servicioRepository.AddAsync(new DetalleServicio()
                     {
                         IdServicio = servicio.Id,
-                        ContentService = reparacionJson
+                        ContentService = JsonConvert.SerializeObject(new ReparacionViewModel(model))
+                    });
+
+                    var view = new InitReparacion()
+                    {
+                        Model = new InitReparacionViewModel
+                        {
+                            Equipo = model.Dispositivo,
+                            Tecnico = (await usuarioRepository.GetByIdAsync(tecnico)).Nombre,
+                            UrlPublic = servicio.IdServicioPublic,
+                            Usuario = usuario.Nombre
+                        }
+                    };
+
+                    await mailNotification.NotifyNewReparacion(new MailMessageViewModel
+                    {
+                        SendTo = usuario.Email,
+                        Title = "Notificación de reparación",
+                        HTMLContent = view.GenerateString(),
                     });
 
                     if (model.IniciarReparacionYa)
