@@ -14,11 +14,13 @@ namespace Sistema_TechCareSolucion.Controllers
     {
         private readonly IUsuarioRepository usuarioRepository;
         private readonly IServicioRepository servicioRepository;
+        private readonly IComentarioRepository comentarioRepository;
 
-        public ServicioController(IUsuarioRepository _usuarioRepository, IServicioRepository _servicioRepository)
+        public ServicioController(IUsuarioRepository _usuarioRepository, IServicioRepository _servicioRepository, IComentarioRepository _comentarioRepository)
         {
             usuarioRepository = _usuarioRepository;
             servicioRepository = _servicioRepository;
+            comentarioRepository = _comentarioRepository;
         }
 
         public IActionResult Index()
@@ -109,8 +111,19 @@ namespace Sistema_TechCareSolucion.Controllers
 
                 if (typeView == "WorkFlow" && int.TryParse(publicId, out id))
                 {
-                    //Vistatecnica
-                    return View(typeView);
+                    var model = new WorkFlowServicioViewModel();
+                    var servicio = await servicioRepository.GetByIdWithIncludeAsync(id);
+
+                    if (servicio != null )
+                    {
+                        servicio.FechaInicio = servicio.EstadoServicio == "En Espera" ? DateTime.Now : servicio.FechaInicio;
+                        servicio.EstadoServicio = servicio.EstadoServicio == "En Espera" ? "En Progreso" : servicio.EstadoServicio;
+
+                        model.Servicio = servicio;
+                        model.Reparacion = JsonConvert.DeserializeObject<ReparacionViewModel>(servicio.DetalleServicio.ContentService);
+                    }
+
+                    return View(typeView, model);
                 }
                 else if (typeView == "Public" && Guid.TryParse(publicId, out publicGuid))
                 {
@@ -123,6 +136,32 @@ namespace Sistema_TechCareSolucion.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> GetComentarios(int idServicio)
+        {
+            var comentarios = await comentarioRepository.GetComentariosByServicioId(idServicio);
+            return Json(comentarios);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AgregarComentario(ComentarioViewModel model)
+        {
+            try
+            {
+                await comentarioRepository.AddAsync(new ComentarioServicio
+                {
+                    Comentario = model.Comentario,
+                    FechaComentario = model.Fecha,
+                    IdServicio = model.Idservicio
+                });
+            }
+            catch (Exception ex)
+            {
+                var message = ex;
+            }
+            
+            return Ok("Comentario agregado con éxito");
         }
     }
 }

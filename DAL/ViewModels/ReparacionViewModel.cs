@@ -2,6 +2,7 @@
 {
     public class ReparacionViewModel : TipoServicio
     {
+        public ReparacionViewModel() { }
         public ReparacionViewModel(NuevaReparacionViewModel reparacion)
         {
             Problema = reparacion.Problema;

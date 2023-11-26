@@ -10,6 +10,7 @@ namespace BAL.Interfaces
 {
     public interface IServicioRepository : IRepository<Servicio>
     {
+        Task<Servicio> GetByIdWithIncludeAsync(int id);
         Task<DataTableResponse<ServiciosViewModel>> ListServicios(DataTableJS model);
     }
 }

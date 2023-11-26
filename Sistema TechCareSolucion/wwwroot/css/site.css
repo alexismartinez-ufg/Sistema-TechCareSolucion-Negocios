@@ -18,6 +18,15 @@ body {
     background: linear-gradient(90deg, rgba(135,81,228,1) 0%, rgba(104,116,248,1) 35%, rgba(25,185,242,1) 100%);
 }
 
+textarea {
+    resize: none;
+}
+
+    input:disabled:hover, textarea:disabled:hover {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+
 .card-hover {
     transition: transform 0.3s;
 }
@@ -38,4 +47,21 @@ body {
 
 body::-webkit-scrollbar {
     width: 0px;
+}
+
+#chat-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+}
+
+#message-box {
+    position: sticky;
+    bottom: 0;
+    padding: 10px;
 }

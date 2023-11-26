@@ -17,6 +17,7 @@ namespace Sistema_TechCareSolucion
             builder.Services.AddDbContext<EmprendimientosContext>();
             builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddTransient<IServicioRepository, ServicioRepository>();
+            builder.Services.AddTransient<IComentarioRepository, ComentarioRepository>();
 
             //builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 

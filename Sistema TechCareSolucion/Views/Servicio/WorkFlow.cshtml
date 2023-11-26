@@ -1,1 +1,174 @@
-﻿<h1>SOY LA VISTA DEL TECNICO</h1>
+﻿@model DAL.ViewModels.WorkFlowServicioViewModel
+
+<div class="row mt-4">
+
+    <div class="col-md-7 text-light card-transparent-rounded-dark">
+        <h3 class="mt-3 text-center border-bottom pb-2">Cliente</h3>
+
+        <input type="hidden" asp-for="Servicio.Id" />
+        <input type="hidden" asp-for="Servicio.DetalleServicio.Id" />
+
+        <div class="row">
+            <div class="col-md-4">
+                <label for="nombre">Nombre de usuario:</label>
+                <input type="text" class="form-control" asp-for="Servicio.Cliente.Nombre" disabled>
+            </div>
+            <div class="col-md-4">
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" class="form-control" asp-for="Servicio.Cliente.Telefono" disabled>
+            </div>
+            <div class="col-md-4">
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" class="form-control" asp-for="Servicio.Cliente.Email" disabled>
+            </div>
+            <div class="col-md-8 mt-2">
+                <label for="direccion">Dirección:</label>
+                <input type="text" class="form-control" asp-for="Servicio.Cliente.Direccion" disabled>
+            </div>
+        </div>
+
+        <h3 class="mt-3 text-center border-bottom pb-2">Servicio</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="tipoServicio">Tipo de servicio:</label>
+                <input type="text" class="form-control" asp-for="Servicio.TipoServicio" disabled>
+            </div>
+            <div class="col-md-5">
+                <label for="identificadorPublic">Identificador público:</label>
+                <input type="text" class="form-control" asp-for="Servicio.IdServicioPublic" disabled>
+            </div>
+            <div class="col-md-4 mt-2">
+                <label for="estadoServicio">Estado de servicio:</label>
+                <input type="text" class="form-control" asp-for="Servicio.EstadoServicio">
+            </div>
+            <div class="col-md-4 mt-2">
+                <label for="costoServicio">Costo de servicio:</label>
+                <input type="number" class="form-control" asp-for="Servicio.CostoServicio">
+            </div>
+            <div class="col-md-4 mt-2">
+                <label for="totalServicio">Total de servicio:</label>
+                <input type="number" class="form-control" asp-for="Servicio.TotalServicio">
+            </div>
+
+        </div>
+
+        <h3 class="mt-3 text-center border-bottom pb-2">Reparación</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="dispositivo">Dispositivo:</label>
+                <input type="text" class="form-control" asp-for="Reparacion.TipoDispositivo">
+            </div>
+            <div class="col-md-4">
+                <label for="marca">Marca:</label>
+                <input type="text" class="form-control" asp-for="Reparacion.Marca">
+            </div>
+            <div class="col-md-4">
+                <label for="modelo">Modelo:</label>
+                <input type="text" class="form-control" asp-for="Reparacion.Modelo">
+            </div>
+            <div class="col-md-12 mt-2">
+                <label for="problema" class="col-sm-2 col-form-label">Problema:</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" asp-for="Reparacion.Problema">
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <label for="detalleProblema">Detalle del problema:</label>
+                <textarea class="form-control" asp-for="Reparacion.DetalleProblema" rows="3"></textarea>
+            </div>
+            <div class="col-md-6 mt-2">
+                <label for="diagnostico">Diagnóstico:</label>
+                <textarea class="form-control" asp-for="Reparacion.Diagnostico" rows=" 3"></textarea>
+            </div>
+        </div>
+
+        <div class="mt-4 mb-3 pt-3 border-top text-center">
+            <button class="btn btn-outline-light">Guardar Estado</button>
+        </div>
+    </div>
+
+    <div class="col-md-4 card-transparent-rounded ms-2">
+
+        <div id="chat-container" class="container h-100">
+            <h4 class="mt-3 text-center text-light">Comentarios</h4>
+
+            <div id="chat-messages" class="border mt-1 mb-2 p-2 overflow-auto">
+                
+            </div>
+
+            <div id="message-box" class="pb-3">
+                <div class="d-flex align-items-center">
+                    <input type="text" class="form-control" id="Comentario" placeholder="Escribe tu mensaje...">
+                    <button type="button" onclick="enviarComentario()" class="ms-2 btn btn-primary">Enviar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            GetComentarios();
+
+            $('#Comentario').keydown(function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    enviarComentario();
+                }
+            });
+        });
+
+        function enviarComentario() {
+            var comentario = $('#Comentario').val();
+            var Servicio = $('#Servicio_Id').val();
+
+            var fecha = new Date();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Servicio/AgregarComentario', 
+                data: {
+                    Comentario: comentario,
+                    Fecha: fecha.toISOString(),
+                    Idservicio: Servicio
+                },
+                success: function (response) {
+                    $('#Comentario').val("");
+                    GetComentarios();
+                },
+                error: function (error) {
+                    $('#Comentario').val("");
+                    console.error(error);
+                }
+            });
+        }
+
+        function GetComentarios(){
+            var Servicio = $('#Servicio_Id').val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/Servicio/GetComentarios',
+                data: { idServicio: Servicio },
+                success: function (comentarios) {
+                    $('#chat-messages').empty();
+
+                    $.each(comentarios, function (index, comentario) {
+                        var fecha = new Date(comentario.fechaComentario);
+                        var formattedFecha = fecha.toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        var message = `<div class="message"><p class="fecha">${formattedFecha} ${comentario.comentario}</p></div>`;
+                        $('#chat-messages').append(message);
+                    });
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+}

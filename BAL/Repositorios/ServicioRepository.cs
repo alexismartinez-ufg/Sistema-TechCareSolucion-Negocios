@@ -19,6 +19,11 @@ namespace BAL.Repositorios
             dbContext = _dbContext;
         }
 
+        public async Task<Servicio> GetByIdWithIncludeAsync(int id)
+        {
+            return await dbContext.Servicios.Include(x => x.Cliente).Include(x => x.Tecnico).Include(x => x.DetalleServicio).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<DataTableResponse<ServiciosViewModel>> ListServicios(DataTableJS model)
         {
             var query = dbContext.Servicios.Include(x => x.DetalleServicio).Include(x=>x.Cliente).Include(x=>x.Tecnico).AsQueryable();
